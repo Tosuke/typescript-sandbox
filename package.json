@@ -6,6 +6,6 @@
   "author": "Tosuke <tasukeprg@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^2.8.0-dev.20180308"
+    "typescript": "^3.0.0-rc"
   }
 }
