@@ -11,7 +11,7 @@ export const PromiseImpl: PromiseImpl = {
 
 declare module './index' {
   // @ts-ignore
-  function inj<A>(impl: PromiseImpl, value: Promise<A>): App<PromiseImpl, A>
+  function inj<A, I extends PromiseImpl>(impl: I, value: Promise<A>): App<I, A>
   // @ts-ignore
-  function prj<A>(value: App<PromiseImpl, A>): Promise<A>
+  function prj<A, I extends PromiseImpl>(value: App<I, A>): Promise<A>
 }
