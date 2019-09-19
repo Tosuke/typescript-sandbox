@@ -1,4 +1,4 @@
-import { App, inj, prj, Functor, mapSymbol } from './'
+import { App, inj, prj, Functor, pureSymbol, mapSymbol } from './'
 
 interface ArrayImpl extends Functor<typeof ArrayImpl> {
   _C: ArrayConstructor
@@ -6,6 +6,7 @@ interface ArrayImpl extends Functor<typeof ArrayImpl> {
 
 export const ArrayImpl: ArrayImpl = {
   _C: Array,
+  [pureSymbol]: val => inj(ArrayImpl, [val]),
   [mapSymbol]: f => val => inj(ArrayImpl, prj(val).map(f)),
 }
 

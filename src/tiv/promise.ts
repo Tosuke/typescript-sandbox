@@ -1,4 +1,4 @@
-import { inj, prj, Functor, mapSymbol } from './'
+import { inj, prj, Functor, pureSymbol, mapSymbol } from './'
 
 interface PromiseImpl extends Functor<typeof PromiseImpl> {
   _C: PromiseConstructor
@@ -6,6 +6,7 @@ interface PromiseImpl extends Functor<typeof PromiseImpl> {
 
 export const PromiseImpl: PromiseImpl = {
   _C: Promise,
+  [pureSymbol]: val => inj(PromiseImpl, Promise.resolve(val)),
   [mapSymbol]: f => val => inj(PromiseImpl, prj(val).then(f)),
 }
 
