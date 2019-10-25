@@ -13,6 +13,11 @@ export const ArrayImpl: ArrayImpl = {
 declare module './index' {
   // @ts-ignore
   function inj<A, I extends ArrayImpl>(impl: I, value: Array<A>): App<I, A>
+
+  interface Inj {
+    <A, I extends ArrayImpl>(impl: I, value: Array<A>): App<I, A>
+  }
+
   // @ts-ignore
   function prj<A, I extends ArrayImpl>(value: App<I, A>): Array<A>
 }

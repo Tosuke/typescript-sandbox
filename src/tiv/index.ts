@@ -4,6 +4,10 @@ export class App<C, A> {
   constructor(readonly impl: C, readonly value: unknown) {}
 }
 
+interface Inj {
+  (impl: never, value: unknown): App<unknown, unknown>
+}
+
 export function inj(impl: never, value: any): App<unknown, unknown> {
   return new App(impl, value)
 }
@@ -28,3 +32,33 @@ export function fmap<A, B>(f: (x: A) => B): <F extends Functor>(value: App<F, A>
   return value => value.impl[mapSymbol](f)(value)
 }
 
+// Monoid
+export const zeroSymbol = Symbol()
+export const appendSymbol = Symbol()
+export interface Monoid<M = any, A = any> {
+  readonly [zeroSymbol]: () => App<M, A>
+  readonly [appendSymbol]: (v1: App<M, A>, v2: App<M, A>) => App<M, A>
+}
+
+export function mzero<M extends Monoid, A>(impl: Monoid<M, A>): App<M, A> {
+  return impl[zeroSymbol]()
+}
+
+export function mappend<M extends Monoid, A>(impl: Monoid<M, A>): (v1: App<M, A>, v2: App<M, A>) => App<M, A> {
+  return impl[appendSymbol]
+}
+
+// モノイドべき乗
+export function expo<M extends Monoid<M, A>, A>(base: App<M, A>, expo: number): App<M, A> {
+  const impl = base.impl
+  const zero = mzero(impl)
+  const append = mappend(impl)
+  let a = zero,
+    b = base
+  while (expo > 0) {
+    if (expo & 1) a = append(a, b)
+    b = append(b, b)
+    expo >>= 1
+  }
+  return a
+}
